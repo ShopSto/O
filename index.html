@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>فروشگاه لباس</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+      direction: rtl;
+    }
+    header {
+      background-color: #222;
+      color: #fff;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.5rem;
+    }
+    .categories {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      background-color: #eee;
+      padding: 1rem;
+    }
+    .category {
+      margin: 0.5rem;
+      padding: 0.7rem 1.2rem;
+      background-color: #fff;
+      border-radius: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .category:hover {
+      background-color: #ddd;
+    }
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      padding: 1rem;
+    }
+    .product {
+      background-color: #fff;
+      border-radius: 2rem;
+      padding: 1rem;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+    .product:hover {
+      transform: scale(1.03);
+    }
+    .product img {
+      width: 100%;
+      border-radius: 1.5rem;
+      height: 200px;
+      object-fit: cover;
+    }
+    .price {
+      margin-top: 0.5rem;
+      font-size: 1.1rem;
+    }
+    .old-price {
+      text-decoration: line-through;
+      color: gray;
+      margin-left: 0.5rem;
+    }
+    .discount {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <header>فروشگاه بزرگ لباس</header>
+  <div class="categories" id="category-list"></div>
+  <div class="products" id="product-list"></div>
+
+  <script>
+    const categories = [
+      'مردانه', 'زنانه', 'بچگانه', 'ورزشی', 'رسمی', 'تابستانی', 'زمستانی', 'لباس خواب', 'اکسسوری', 'کفش', 'جین', 'پالتو'
+    ];
+
+    const productsData = {};
+    categories.forEach(category => {
+      productsData[category] = Array.from({ length: 10 }).map((_, i) => {
+        const price = Math.floor(Math.random() * 500 + 200);
+        const discount = Math.floor(Math.random() * 40 + 10);
+        const finalPrice = Math.floor(price * (100 - discount) / 100);
+        return {
+          name: `${category} ${i + 1}`,
+          image: `https://source.unsplash.com/300x300/?clothing,${category},${i}`,
+          price,
+          discount,
+          finalPrice
+        };
+      });
+    });
+
+    const categoryList = document.getElementById("category-list");
+    const productList = document.getElementById("product-list");
+
+    categories.forEach(cat => {
+      const btn = document.createElement("div");
+      btn.className = "category";
+      btn.textContent = cat;
+      btn.onclick = () => displayProducts(cat);
+      categoryList.appendChild(btn);
+    });
+
+    function displayProducts(category) {
+      productList.innerHTML = "";
+      productsData[category].forEach(p => {
+        const div = document.createElement("div");
+        div.className = "product";
+        div.innerHTML = `
+          <img src="${p.image}" alt="${p.name}" />
+          <h4>${p.name}</h4>
+          <div class="price">
+            <span class="old-price">${p.price} تومان</span>
+            <span class="discount">${p.finalPrice} تومان (${p.discount}% تخفیف)</span>
+          </div>
+        `;
+        productList.appendChild(div);
+      });
+    }
+  </script>
+</body>
+</html>
