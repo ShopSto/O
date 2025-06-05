@@ -39,6 +39,13 @@
     .category-button:hover {
       background-color: #e0e0e0;
     }
+    .category-image {
+      width: 100%;
+      border-radius: 1rem;
+      margin-bottom: 0.5rem;
+      aspect-ratio: 9/16;
+      object-fit: cover;
+    }
     .products {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -101,7 +108,7 @@
       'مردانه', 'زنانه', 'بچگانه', 'ورزشی', 'رسمی', 'تابستانی', 'زمستانی', 'لباس خواب', 'اکسسوری', 'کفش', 'جین', 'پالتو'
     ];
 
-    const placeholderImage = (title) => `https://placehold.co/300x533?text=${encodeURIComponent(title)}`;
+    const placeholderImage = (title, color = 'ccc') => `https://via.placeholder.com/300x533/${color}/fff?text=${encodeURIComponent(title)}`;
 
     const productsData = {};
     categories.forEach(category => {
@@ -111,7 +118,7 @@
         const finalPrice = Math.floor(price * (100 - discount) / 100);
         return {
           name: `${category} ${i + 1}`,
-          image: placeholderImage(category),
+          image: placeholderImage(category, '888'),
           price,
           discount,
           finalPrice
@@ -125,7 +132,10 @@
     categories.forEach(cat => {
       const btn = document.createElement("div");
       btn.className = "category-button";
-      btn.textContent = cat;
+      btn.innerHTML = `
+        <img src="${placeholderImage(cat, '444')}" class="category-image" alt="${cat}" />
+        <div>${cat}</div>
+      `;
       btn.onclick = () => displayProducts(cat);
       categoryList.appendChild(btn);
     });
