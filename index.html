@@ -12,34 +12,32 @@
       padding: 0;
       direction: rtl;
     }
-    header {
-      background-color: #222;
-      color: #fff;
-      padding: 1rem;
+    .store-header {
+      padding: 2rem 1rem 1rem;
       text-align: center;
       font-size: 1.5rem;
-      animation: fadeInDown 1s ease;
+      font-weight: bold;
+      color: #333;
     }
-    .categories {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      background-color: #eee;
-      padding: 1rem;
+    .category-list-view {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
     }
-    .category {
-      margin: 0.5rem;
-      padding: 0.7rem 1.2rem;
-      background-color: #fff;
+    .category-button {
+      background-color: #f0f0f0;
       border-radius: 1rem;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1rem;
       cursor: pointer;
-      transition: 0.3s;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      font-size: 0.9rem;
-      animation: fadeIn 0.8s ease;
+      transition: background-color 0.3s;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 0.6s ease;
     }
-    .category:hover {
-      background-color: #ddd;
+    .category-button:hover {
+      background-color: #e0e0e0;
     }
     .products {
       display: grid;
@@ -49,7 +47,7 @@
     }
     .product {
       background-color: #fff;
-      border-radius: 2rem;
+      border-radius: 1rem;
       padding: 1rem;
       text-align: center;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
@@ -61,8 +59,8 @@
     }
     .product img {
       width: 100%;
-      border-radius: 1.5rem;
-      height: 180px;
+      border-radius: 1rem;
+      aspect-ratio: 9 / 16;
       object-fit: cover;
     }
     .price {
@@ -78,21 +76,9 @@
       color: red;
     }
     @media (max-width: 600px) {
-      .categories {
-        flex-direction: column;
-        align-items: center;
-      }
-      .category {
-        width: 80%;
-        text-align: center;
-        font-size: 1rem;
-      }
       .products {
-        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        grid-template-columns: repeat(2, 1fr);
         padding: 0.5rem;
-      }
-      .product img {
-        height: 150px;
       }
     }
     @keyframes fadeIn {
@@ -103,15 +89,11 @@
       from {opacity: 0; transform: translateY(30px);}
       to {opacity: 1; transform: translateY(0);}
     }
-    @keyframes fadeInDown {
-      from {opacity: 0; transform: translateY(-30px);}
-      to {opacity: 1; transform: translateY(0);}
-    }
   </style>
 </head>
 <body>
-  <header>فروشگاه بزرگ لباس</header>
-  <div class="categories" id="category-list"></div>
+  <div class="store-header">فروشگاه لباس من</div>
+  <div class="category-list-view" id="category-list"></div>
   <div class="products" id="product-list"></div>
 
   <script>
@@ -119,20 +101,7 @@
       'مردانه', 'زنانه', 'بچگانه', 'ورزشی', 'رسمی', 'تابستانی', 'زمستانی', 'لباس خواب', 'اکسسوری', 'کفش', 'جین', 'پالتو'
     ];
 
-    const localImages = {
-      'مردانه': 'https://via.placeholder.com/300x300?text=مردانه',
-      'زنانه': 'https://via.placeholder.com/300x300?text=زنانه',
-      'بچگانه': 'https://via.placeholder.com/300x300?text=بچگانه',
-      'ورزشی': 'https://via.placeholder.com/300x300?text=ورزشی',
-      'رسمی': 'https://via.placeholder.com/300x300?text=رسمی',
-      'تابستانی': 'https://via.placeholder.com/300x300?text=تابستانی',
-      'زمستانی': 'https://via.placeholder.com/300x300?text=زمستانی',
-      'لباس خواب': 'https://via.placeholder.com/300x300?text=لباس+خواب',
-      'اکسسوری': 'https://via.placeholder.com/300x300?text=اکسسوری',
-      'کفش': 'https://via.placeholder.com/300x300?text=کفش',
-      'جین': 'https://via.placeholder.com/300x300?text=جین',
-      'پالتو': 'https://via.placeholder.com/300x300?text=پالتو'
-    };
+    const placeholderImage = (title) => `https://placehold.co/300x533?text=${encodeURIComponent(title)}`;
 
     const productsData = {};
     categories.forEach(category => {
@@ -142,7 +111,7 @@
         const finalPrice = Math.floor(price * (100 - discount) / 100);
         return {
           name: `${category} ${i + 1}`,
-          image: localImages[category],
+          image: placeholderImage(category),
           price,
           discount,
           finalPrice
@@ -155,7 +124,7 @@
 
     categories.forEach(cat => {
       const btn = document.createElement("div");
-      btn.className = "category";
+      btn.className = "category-button";
       btn.textContent = cat;
       btn.onclick = () => displayProducts(cat);
       categoryList.appendChild(btn);
