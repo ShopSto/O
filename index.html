@@ -18,6 +18,7 @@
       padding: 1rem;
       text-align: center;
       font-size: 1.5rem;
+      animation: fadeInDown 1s ease;
     }
     .categories {
       display: flex;
@@ -35,6 +36,7 @@
       transition: 0.3s;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
       font-size: 0.9rem;
+      animation: fadeIn 0.8s ease;
     }
     .category:hover {
       background-color: #ddd;
@@ -52,6 +54,7 @@
       text-align: center;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       transition: transform 0.3s;
+      animation: fadeInUp 0.8s ease;
     }
     .product:hover {
       transform: scale(1.03);
@@ -92,6 +95,18 @@
         height: 150px;
       }
     }
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+    @keyframes fadeInUp {
+      from {opacity: 0; transform: translateY(30px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+    @keyframes fadeInDown {
+      from {opacity: 0; transform: translateY(-30px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
   </style>
 </head>
 <body>
@@ -104,30 +119,30 @@
       'مردانه', 'زنانه', 'بچگانه', 'ورزشی', 'رسمی', 'تابستانی', 'زمستانی', 'لباس خواب', 'اکسسوری', 'کفش', 'جین', 'پالتو'
     ];
 
-    const fixedImageUrls = {
-      'مردانه': 'https://source.unsplash.com/300x300/?man-clothes',
-      'زنانه': 'https://source.unsplash.com/300x300/?woman-fashion',
-      'بچگانه': 'https://source.unsplash.com/300x300/?kids-clothes',
-      'ورزشی': 'https://source.unsplash.com/300x300/?sportswear',
-      'رسمی': 'https://source.unsplash.com/300x300/?formal-clothing',
-      'تابستانی': 'https://source.unsplash.com/300x300/?summer-clothes',
-      'زمستانی': 'https://source.unsplash.com/300x300/?winter-fashion',
-      'لباس خواب': 'https://source.unsplash.com/300x300/?sleepwear',
-      'اکسسوری': 'https://source.unsplash.com/300x300/?accessories',
-      'کفش': 'https://source.unsplash.com/300x300/?shoes',
-      'جین': 'https://source.unsplash.com/300x300/?jeans',
-      'پالتو': 'https://source.unsplash.com/300x300/?coat'
+    const localImages = {
+      'مردانه': 'https://via.placeholder.com/300x300?text=مردانه',
+      'زنانه': 'https://via.placeholder.com/300x300?text=زنانه',
+      'بچگانه': 'https://via.placeholder.com/300x300?text=بچگانه',
+      'ورزشی': 'https://via.placeholder.com/300x300?text=ورزشی',
+      'رسمی': 'https://via.placeholder.com/300x300?text=رسمی',
+      'تابستانی': 'https://via.placeholder.com/300x300?text=تابستانی',
+      'زمستانی': 'https://via.placeholder.com/300x300?text=زمستانی',
+      'لباس خواب': 'https://via.placeholder.com/300x300?text=لباس+خواب',
+      'اکسسوری': 'https://via.placeholder.com/300x300?text=اکسسوری',
+      'کفش': 'https://via.placeholder.com/300x300?text=کفش',
+      'جین': 'https://via.placeholder.com/300x300?text=جین',
+      'پالتو': 'https://via.placeholder.com/300x300?text=پالتو'
     };
 
     const productsData = {};
     categories.forEach(category => {
       productsData[category] = Array.from({ length: 10 }).map((_, i) => {
         const price = Math.floor(Math.random() * 500 + 200);
-        const discount = Math.floor(Math.random() * 15 + 5); // تخفیف کمتر
+        const discount = Math.floor(Math.random() * 15 + 5);
         const finalPrice = Math.floor(price * (100 - discount) / 100);
         return {
           name: `${category} ${i + 1}`,
-          image: fixedImageUrls[category],
+          image: localImages[category],
           price,
           discount,
           finalPrice
