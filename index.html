@@ -38,10 +38,12 @@
   <script>
     const VIDEO_SRC = "https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu.mp4";
     const videos = document.querySelectorAll("video");
+    let activeVideo = null;
 
     videos.forEach((video) => {
       video.src = VIDEO_SRC;
 
+      // توقف روی فریم آخر
       video.addEventListener("timeupdate", () => {
         if (video.duration - video.currentTime < 0.5) {
           video.pause();
@@ -53,13 +55,23 @@
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         const video = entry.target;
-        const rect = video.getBoundingClientRect();
 
         if (entry.intersectionRatio > 0.1) {
-          // اگر ویدیو در دید است، بازنشانی و پخش شود
-          video.pause();
-          video.currentTime = 0;
-          video.play();
+          if (activeVideo && activeVideo !== video) {
+            activeVideo.pause();
+          }
+          if (video.paused || video.ended) {
+            video.play();
+          }
+          activeVideo = video;
+        } else {
+          // اگر ویدیو کاملاً از دید خارج شد
+          const rect = video.getBoundingClientRect();
+          const fullyOut = rect.bottom <= 0 || rect.top >= window.innerHeight;
+          if (fullyOut) {
+            video.pause();
+            video.currentTime = 0; // بازگشت به ابتدا
+          }
         }
       });
     }, { threshold: 0.1 });
