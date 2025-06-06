@@ -1,94 +1,44 @@
 <!DOCTYPE html>
 <html lang="fa">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Reels Style Videos</title>
+  <meta charset="UTF-8">
+  <title>ریلز تصویری</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
     body {
       margin: 0;
-      background: black;
+      background: #000;
+      overflow-y: scroll;
+    }
+    .reels-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
     .reel {
       width: 100vw;
-      aspect-ratio: 9 / 16;
-      background: black;
+      height: 100vh;
+      position: relative;
       overflow: hidden;
     }
-    video {
+    .reel img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      display: block;
     }
   </style>
 </head>
 <body>
-
-  <!-- ۵ ویدیو -->
-  <div class="reel"><video muted playsinline preload="auto" data-index="0"></video></div>
-  <div class="reel"><video muted playsinline preload="auto" data-index="1"></video></div>
-  <div class="reel"><video muted playsinline preload="auto" data-index="2"></video></div>
-  <div class="reel"><video muted playsinline preload="auto" data-index="3"></video></div>
-  <div class="reel"><video muted playsinline preload="auto" data-index="4"></video></div>
-
-  <script>
-    const VIDEO_SRC = "https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu.mp4";
-    const videos = document.querySelectorAll("video");
-    let activeVideo = null;
-
-    videos.forEach((video) => {
-      video.src = VIDEO_SRC;
-
-      // توقف روی فریم آخر
-      video.addEventListener("timeupdate", () => {
-        if (video.duration - video.currentTime < 0.5) {
-          video.pause();
-          video.currentTime = video.duration;
-        }
-      });
-    });
-
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        const video = entry.target;
-
-        if (entry.intersectionRatio > 0.1) {
-          if (activeVideo && activeVideo !== video) {
-            activeVideo.pause();
-          }
-          if (video.paused || video.ended) {
-            video.play();
-          }
-          activeVideo = video;
-        } else {
-          // اگر ویدیو کاملاً از دید خارج شد
-          const rect = video.getBoundingClientRect();
-          const fullyOut = rect.bottom <= 0 || rect.top >= window.innerHeight;
-          if (fullyOut) {
-            video.pause();
-            video.currentTime = 0; // بازگشت به ابتدا
-          }
-        }
-      });
-    }, { threshold: 0.1 });
-
-    videos.forEach(video => observer.observe(video));
-
-    // فقط یکبار پخش خودکار ویدیو اول هنگام بارگذاری اولیه
-    window.addEventListener("load", () => {
-      const firstVideo = videos[0];
-      const playOnce = () => {
-        firstVideo.play();
-        observer.unobserve(firstVideo);
-        observer.observe(firstVideo); // Re-observe to handle scroll behavior
-        window.removeEventListener("load", playOnce);
-      };
-      playOnce();
-    });
-  </script>
+  <div class="reels-container">
+    <div class="reel">
+      <img src="https://raw.githubusercontent.com/username/repo/main/Gray%20Illustrative%20Restaurant%20Menu%20(1).png" alt="Reel 1">
+    </div>
+    <div class="reel">
+      <img src="https://raw.githubusercontent.com/username/repo/main/Gray%20Illustrative%20Restaurant%20Menu%20(2).png" alt="Reel 2">
+    </div>
+    <div class="reel">
+      <img src="https://raw.githubusercontent.com/username/repo/main/Gray%20Illustrative%20Restaurant%20Menu%20(3).png" alt="Reel 3">
+    </div>
+    <!-- عکس‌های بیشتری هم می‌تونی اضافه کنی -->
+  </div>
 </body>
 </html>
