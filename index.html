@@ -33,7 +33,7 @@
 <body>
 
   <!-- پنج ویدیو با آدرس گیت‌هاب -->
-  <div class="reel"><video preload="auto" src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu.mp4" muted playsinline></video></div>
+  <div class="reel"><video preload="auto" src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu.mp4" muted playsinline autoplay></video></div>
   <div class="reel"><video preload="auto" src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu.mp4" muted playsinline></video></div>
   <div class="reel"><video preload="auto" src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu.mp4" muted playsinline></video></div>
   <div class="reel"><video preload="auto" src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu.mp4" muted playsinline></video></div>
@@ -43,11 +43,14 @@
     const videos = document.querySelectorAll(".reel video");
     let activeVideo = null;
 
-    videos.forEach(video => {
-      video.addEventListener('loadeddata', () => {
-        video.pause();
-        video.currentTime = 0;
-      });
+    videos.forEach((video, index) => {
+      // ویدیو اول به صورت خودکار پخش شود
+      if (index !== 0) {
+        video.addEventListener('loadeddata', () => {
+          video.pause();
+          video.currentTime = 0;
+        });
+      }
     });
 
     const observer = new IntersectionObserver(entries => {
