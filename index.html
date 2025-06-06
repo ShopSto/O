@@ -38,21 +38,10 @@
   <script>
     const VIDEO_SRC = "https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu.mp4";
     const videos = document.querySelectorAll("video");
-    let hasPlayedFirst = false;
     let activeVideo = null;
 
-    videos.forEach((video, index) => {
+    videos.forEach((video) => {
       video.src = VIDEO_SRC;
-
-      // فقط ویدیو اول یک بار بعد از لود پخش شود
-      if (index === 0) {
-        video.addEventListener("loadeddata", () => {
-          if (!hasPlayedFirst) {
-            video.play();
-            hasPlayedFirst = true;
-          }
-        });
-      }
 
       // توقف روی فریم آخر
       video.addEventListener("timeupdate", () => {
@@ -66,30 +55,40 @@
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         const video = entry.target;
-        const index = parseInt(video.dataset.index);
 
         if (entry.intersectionRatio > 0.1) {
-          // پخش ویدیو
           if (activeVideo && activeVideo !== video) {
             activeVideo.pause();
           }
-          if (!(index === 0 && hasPlayedFirst && video.currentTime > 0)) {
+          if (video.paused || video.ended) {
             video.play();
           }
           activeVideo = video;
         } else {
-          // اگر ویدیو به طور کامل از دید خارج شود
+          // اگر ویدیو کاملاً از دید خارج شد
           const rect = video.getBoundingClientRect();
           const fullyOut = rect.bottom <= 0 || rect.top >= window.innerHeight;
           if (fullyOut) {
             video.pause();
-            video.currentTime = 0;  // بازگشت به ابتدا
+            video.currentTime = 0; // بازگشت به ابتدا
           }
         }
       });
     }, { threshold: 0.1 });
 
     videos.forEach(video => observer.observe(video));
+
+    // فقط یکبار پخش خودکار ویدیو اول هنگام بارگذاری اولیه
+    window.addEventListener("load", () => {
+      const firstVideo = videos[0];
+      const playOnce = () => {
+        firstVideo.play();
+        observer.unobserve(firstVideo);
+        observer.observe(firstVideo); // Re-observe to handle scroll behavior
+        window.removeEventListener("load", playOnce);
+      };
+      playOnce();
+    });
   </script>
 </body>
 </html>
