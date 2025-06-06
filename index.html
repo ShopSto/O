@@ -28,15 +28,37 @@
 <body>
 
   <!-- پنج ویدیو با آدرس گیت‌هاب -->
-  <div class="reel"><video src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu.mp4" muted playsinline></video></div>
-  <div class="reel"><video src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu.mp4" muted playsinline></video></div>
-  <div class="reel"><video src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu.mp4" muted playsinline></video></div>
-  <div class="reel"><video src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu.mp4" muted playsinline></video></div>
-  <div class="reel"><video src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu.mp4" muted playsinline></video></div>
+  <div class="reel"><video preload="auto" src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu.mp4" muted playsinline></video></div>
+  <div class="reel"><video preload="auto" src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu.mp4" muted playsinline></video></div>
+  <div class="reel"><video preload="auto" src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu.mp4" muted playsinline></video></div>
+  <div class="reel"><video preload="auto" src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu.mp4" muted playsinline></video></div>
+  <div class="reel"><video preload="auto" src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu.mp4" muted playsinline></video></div>
 
   <script>
     const videos = document.querySelectorAll(".reel video");
     let activeVideo = null;
+
+    // همه ویدیوها را دانلود و روی استوپ قرار بده
+    videos.forEach(video => {
+      video.addEventListener('loadeddata', () => {
+        video.pause();
+        video.currentTime = 0;
+      });
+    });
+
+    // پخش ویدیو اول در شروع
+    window.addEventListener('DOMContentLoaded', () => {
+      const firstVideo = videos[0];
+      firstVideo.play();
+      activeVideo = firstVideo;
+
+      firstVideo.addEventListener('timeupdate', () => {
+        if (firstVideo.duration - firstVideo.currentTime < 0.5) {
+          firstVideo.pause();
+          firstVideo.currentTime = firstVideo.duration;
+        }
+      });
+    });
 
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
@@ -44,6 +66,7 @@
         if (entry.isIntersecting) {
           if (activeVideo && activeVideo !== video) {
             activeVideo.pause();
+            activeVideo.currentTime = 0;
           }
           video.currentTime = 0;
           video.play();
@@ -57,6 +80,7 @@
           });
         } else {
           video.pause();
+          video.currentTime = 0;
         }
       });
     }, { threshold: 0.8 });
