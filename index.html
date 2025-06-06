@@ -73,7 +73,7 @@
           if (activeVideo && activeVideo !== video) {
             activeVideo.pause();
           }
-          if (!(index === 0 && hasPlayedFirst)) {
+          if (!(index === 0 && hasPlayedFirst && video.currentTime > 0)) {
             video.play();
           }
           activeVideo = video;
