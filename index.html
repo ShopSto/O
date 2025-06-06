@@ -2,7 +2,7 @@
 <html lang="fa">
 <head>
   <meta charset="UTF-8">
-  <title>پخش ویدیو با تأخیر و فریم آخر</title>
+  <title>لیست ویدیو با پخش خودکار تأخیری</title>
   <style>
     body {
       margin: 0;
@@ -44,30 +44,34 @@
 </head>
 <body>
 
-  <!-- هر ویدیو داخل یک wrapper با یک overlay از فریم آخر -->
+  <!-- ویدیو 1 -->
   <div class="video-wrapper" data-loaded="false">
-    <div class="video-overlay" style="background-image: url('frame.jpg');"></div>
-    <video data-src="Gray Illustrative Restaurant Menu.mp4" muted playsinline></video>
+    <div class="video-overlay" style="background-image: url('frame1.jpg');"></div>
+    <video data-src="https://raw.githubusercontent.com/shopsto/O/main/Gray%20Illustrative%20Restaurant%20Menu%201.mp4" muted playsinline></video>
   </div>
 
+  <!-- ویدیو 2 -->
   <div class="video-wrapper" data-loaded="false">
-    <div class="video-overlay" style="background-image: url('frame.jpg');"></div>
-    <video data-src="Gray Illustrative Restaurant Menu.mp4" muted playsinline></video>
+    <div class="video-overlay" style="background-image: url('frame2.jpg');"></div>
+    <video data-src="https://raw.githubusercontent.com/shopsto/O/main/Gray%20Illustrative%20Restaurant%20Menu%202.mp4" muted playsinline></video>
   </div>
 
+  <!-- ویدیو 3 -->
   <div class="video-wrapper" data-loaded="false">
-    <div class="video-overlay" style="background-image: url('frame.jpg');"></div>
-    <video data-src="Gray Illustrative Restaurant Menu.mp4" muted playsinline></video>
+    <div class="video-overlay" style="background-image: url('frame3.jpg');"></div>
+    <video data-src="https://raw.githubusercontent.com/shopsto/O/main/Gray%20Illustrative%20Restaurant%20Menu%203.mp4" muted playsinline></video>
   </div>
 
+  <!-- ویدیو 4 -->
   <div class="video-wrapper" data-loaded="false">
-    <div class="video-overlay" style="background-image: url('frame.jpg');"></div>
-    <video data-src="Gray Illustrative Restaurant Menu.mp4" muted playsinline></video>
+    <div class="video-overlay" style="background-image: url('frame4.jpg');"></div>
+    <video data-src="https://raw.githubusercontent.com/shopsto/O/main/Gray%20Illustrative%20Restaurant%20Menu%204.mp4" muted playsinline></video>
   </div>
 
+  <!-- ویدیو 5 -->
   <div class="video-wrapper" data-loaded="false">
-    <div class="video-overlay" style="background-image: url('frame.jpg');"></div>
-    <video data-src="Gray Illustrative Restaurant Menu.mp4" muted playsinline></video>
+    <div class="video-overlay" style="background-image: url('frame5.jpg');"></div>
+    <video data-src="https://raw.githubusercontent.com/shopsto/O/main/Gray%20Illustrative%20Restaurant%20Menu%205.mp4" muted playsinline></video>
   </div>
 
   <script>
@@ -78,10 +82,9 @@
         const wrapper = entry.target;
         const video = wrapper.querySelector('video');
 
-        if (entry.isIntersecting && !wrapper.dataset.loaded) {
+        if (entry.isIntersecting && wrapper.dataset.loaded === "false") {
           wrapper.dataset.loaded = "true";
 
-          // ۲ ثانیه صبر می‌کنیم، اگر هنوز توی دید بود، پخش می‌کنیم
           setTimeout(() => {
             if (isInViewport(wrapper)) {
               video.src = video.dataset.src;
@@ -104,7 +107,6 @@
       observer.observe(wrapper);
     });
 
-    // تابع بررسی اینکه عنصر هنوز در دید هست یا نه
     function isInViewport(el) {
       const rect = el.getBoundingClientRect();
       return (
