@@ -1,27 +1,23 @@
 <!DOCTYPE html>
 <html lang="fa">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Instagram-style Reels</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reels Style Videos</title>
   <style>
     * {
       box-sizing: border-box;
     }
-
     body {
       margin: 0;
       background: black;
     }
-
     .reel {
-      position: relative;
       width: 100vw;
       aspect-ratio: 9 / 16;
-      overflow: hidden;
       background: black;
+      overflow: hidden;
     }
-
     video {
       width: 100%;
       height: 100%;
@@ -32,46 +28,58 @@
 </head>
 <body>
 
-  <!-- پنج ویدیو با آدرس گیت‌هاب -->
-  <div class="reel"><video preload="auto" src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu.mp4" muted playsinline autoplay></video></div>
-  <div class="reel"><video preload="auto" src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu.mp4" muted playsinline></video></div>
-  <div class="reel"><video preload="auto" src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu.mp4" muted playsinline></video></div>
-  <div class="reel"><video preload="auto" src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu.mp4" muted playsinline></video></div>
-  <div class="reel"><video preload="auto" src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu.mp4" muted playsinline></video></div>
+  <!-- ۵ ویدیو -->
+  <div class="reel"><video muted playsinline preload="auto" data-index="0"></video></div>
+  <div class="reel"><video muted playsinline preload="auto" data-index="1"></video></div>
+  <div class="reel"><video muted playsinline preload="auto" data-index="2"></video></div>
+  <div class="reel"><video muted playsinline preload="auto" data-index="3"></video></div>
+  <div class="reel"><video muted playsinline preload="auto" data-index="4"></video></div>
 
   <script>
-    const videos = document.querySelectorAll(".reel video");
+    const VIDEO_SRC = "https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu.mp4";
+    const videos = document.querySelectorAll("video");
+    let hasPlayedFirst = false;
     let activeVideo = null;
 
     videos.forEach((video, index) => {
-      // ویدیو اول به صورت خودکار پخش شود
-      if (index !== 0) {
-        video.addEventListener('loadeddata', () => {
-          video.pause();
-          video.currentTime = 0;
+      video.src = VIDEO_SRC;
+
+      // فقط ویدیو اول یکبار پخش شود
+      if (index === 0) {
+        video.addEventListener("loadeddata", () => {
+          if (!hasPlayedFirst) {
+            video.play();
+            hasPlayedFirst = true;
+          }
         });
       }
+
+      // وقتی ویدیو کامل پخش شد، روی فریم آخر نگهش دار
+      video.addEventListener("timeupdate", () => {
+        if (video.duration - video.currentTime < 0.5) {
+          video.pause();
+          video.currentTime = video.duration;
+        }
+      });
     });
 
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         const video = entry.target;
+        const index = parseInt(video.dataset.index);
 
         if (entry.intersectionRatio > 0.1) {
+          // اگر ویدیویی دیگر در حال پخش باشد، متوقفش کن
           if (activeVideo && activeVideo !== video) {
             activeVideo.pause();
-            activeVideo.currentTime = 0;
           }
 
-          video.play();
-          activeVideo = video;
+          // اگر ویدیوی اول نیست یا ویدیو اول بعد از بار اول است
+          if (!(index === 0 && hasPlayedFirst)) {
+            video.play();
+          }
 
-          video.addEventListener('timeupdate', () => {
-            if (video.duration - video.currentTime < 0.5) {
-              video.pause();
-              video.currentTime = video.duration;
-            }
-          });
+          activeVideo = video;
         } else {
           const rect = video.getBoundingClientRect();
           const fullyOut = rect.bottom <= 0 || rect.top >= window.innerHeight;
@@ -85,6 +93,5 @@
 
     videos.forEach(video => observer.observe(video));
   </script>
-
 </body>
 </html>
