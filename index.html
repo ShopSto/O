@@ -2,7 +2,7 @@
 <html lang="fa">
 <head>
   <meta charset="UTF-8">
-  <title>پخش زنجیره‌ای ویدیوها</title>
+  <title>پخش ۵ بار ویدیو</title>
   <style>
     * {
       margin: 0;
@@ -35,12 +35,12 @@
 </head>
 <body>
 
-  <!-- ۵ ویدیو (همگی غیرقابل کنترل و خاموش) -->
-  <video id="video1" src="video1.mp4" muted playsinline></video>
-  <video id="video2" src="video2.mp4" muted playsinline></video>
-  <video id="video3" src="video3.mp4" muted playsinline></video>
-  <video id="video4" src="video4.mp4" muted playsinline></video>
-  <video id="video5" src="video5.mp4" muted playsinline></video>
+  <!-- ویدیو یکسان، ۵ بار تکرار شده -->
+  <video id="video1" src="Gray Illustrative Restaurant Menu.mp4" muted playsinline></video>
+  <video id="video2" src="Gray Illustrative Restaurant Menu.mp4" muted playsinline></video>
+  <video id="video3" src="Gray Illustrative Restaurant Menu.mp4" muted playsinline></video>
+  <video id="video4" src="Gray Illustrative Restaurant Menu.mp4" muted playsinline></video>
+  <video id="video5" src="Gray Illustrative Restaurant Menu.mp4" muted playsinline></video>
 
   <script>
     const videos = [
@@ -64,7 +64,7 @@
       video.onended = () => {
         video.classList.remove('active');
         video.pause();
-        video.currentTime = video.duration; // تصویر آخر باقی بمونه
+        video.currentTime = video.duration; // فریم آخر ثابت بمونه
         playNext(index + 1);
       };
     }
