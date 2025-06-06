@@ -2,7 +2,7 @@
 <html lang="fa">
 <head>
   <meta charset="UTF-8">
-  <title>لیست ویدیو با فریم اولیه</title>
+  <title>ویدیو با لود تنبل و پخش هوشمند</title>
   <style>
     body {
       margin: 0;
@@ -34,57 +34,66 @@
 </head>
 <body>
 
-  <!-- تکرار ۵ ویدیو با تصویر جدید -->
+  <!-- تکرار ۵ ویدیو با عکس صحیح -->
+  <!-- فقط عکس نمایش داده می‌شود. ویدیو بعداً لود می‌شود -->
   <div class="video-wrapper" data-src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu.mp4">
     <img class="video-placeholder" src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu%20(1).png" alt="preview" />
-    <video muted playsinline preload="auto"></video>
   </div>
 
   <div class="video-wrapper" data-src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu.mp4">
     <img class="video-placeholder" src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu%20(1).png" alt="preview" />
-    <video muted playsinline preload="auto"></video>
   </div>
 
   <div class="video-wrapper" data-src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu.mp4">
     <img class="video-placeholder" src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu%20(1).png" alt="preview" />
-    <video muted playsinline preload="auto"></video>
   </div>
 
   <div class="video-wrapper" data-src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu.mp4">
     <img class="video-placeholder" src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu%20(1).png" alt="preview" />
-    <video muted playsinline preload="auto"></video>
   </div>
 
   <div class="video-wrapper" data-src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu.mp4">
     <img class="video-placeholder" src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu%20(1).png" alt="preview" />
-    <video muted playsinline preload="auto"></video>
   </div>
 
   <script>
-    const wrappers = document.querySelectorAll(".video-wrapper");
-
+    const wrappers = document.querySelectorAll('.video-wrapper');
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         const wrapper = entry.target;
-        const video = wrapper.querySelector("video");
-        const placeholder = wrapper.querySelector(".video-placeholder");
 
-        if (entry.isIntersecting && !video.dataset.started) {
-          video.dataset.started = "true";
+        if (entry.isIntersecting && !wrapper.dataset.playing) {
+          wrapper.dataset.playing = 'true';
 
           setTimeout(() => {
             if (isInViewport(wrapper)) {
+              const video = document.createElement('video');
               video.src = wrapper.dataset.src;
+              video.muted = true;
+              video.playsInline = true;
+              video.style.position = "absolute";
+              video.style.top = 0;
+              video.style.left = 0;
+              video.style.width = "100%";
+              video.style.height = "100%";
+              video.style.objectFit = "cover";
               video.style.display = "block";
+              video.style.pointerEvents = "none";
+
+              const placeholder = wrapper.querySelector('img');
               placeholder.style.display = "none";
+
+              wrapper.appendChild(video);
               video.play();
 
               video.onended = () => {
                 video.pause();
                 video.currentTime = video.duration;
               };
+            } else {
+              wrapper.dataset.playing = 'false';
             }
-          }, 2000); // دو ثانیه تأخیر
+          }, 2000);
         }
       });
     }, {
@@ -98,6 +107,5 @@
       return rect.top < window.innerHeight && rect.bottom > 0;
     }
   </script>
-
 </body>
 </html>
