@@ -50,23 +50,9 @@
       });
     });
 
-    window.addEventListener('DOMContentLoaded', () => {
-      const firstVideo = videos[0];
-      firstVideo.play();
-      activeVideo = firstVideo;
-
-      firstVideo.addEventListener('timeupdate', () => {
-        if (firstVideo.duration - firstVideo.currentTime < 0.5) {
-          firstVideo.pause();
-          firstVideo.currentTime = firstVideo.duration;
-        }
-      });
-    });
-
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         const video = entry.target;
-        const index = Array.from(videos).indexOf(video);
 
         if (entry.intersectionRatio > 0.1) {
           if (activeVideo && activeVideo !== video) {
@@ -74,18 +60,15 @@
             activeVideo.currentTime = 0;
           }
 
-          if (index !== 0) {
-            video.currentTime = 0;
-            video.play();
-            activeVideo = video;
+          video.play();
+          activeVideo = video;
 
-            video.addEventListener('timeupdate', () => {
-              if (video.duration - video.currentTime < 0.5) {
-                video.pause();
-                video.currentTime = video.duration;
-              }
-            });
-          }
+          video.addEventListener('timeupdate', () => {
+            if (video.duration - video.currentTime < 0.5) {
+              video.pause();
+              video.currentTime = video.duration;
+            }
+          });
         } else {
           const rect = video.getBoundingClientRect();
           const fullyOut = rect.bottom <= 0 || rect.top >= window.innerHeight;
