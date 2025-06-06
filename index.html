@@ -2,75 +2,116 @@
 <html lang="fa">
 <head>
   <meta charset="UTF-8">
-  <title>پخش ۵ بار ویدیو</title>
+  <title>پخش ویدیو با تأخیر و فریم آخر</title>
   <style>
-    * {
+    body {
       margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+      background: black;
+      font-family: sans-serif;
     }
 
-    html, body {
+    .video-wrapper {
       width: 100%;
-      height: 100%;
-      background: black;
+      height: 100vh;
+      position: relative;
       overflow: hidden;
     }
 
     video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      pointer-events: none;
+      background-color: black;
+    }
+
+    .video-overlay {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      display: none; /* فقط ویدیوی فعال نمایش داده میشه */
-      pointer-events: none;
+      background-size: cover;
+      background-position: center;
+      z-index: 1;
     }
 
-    video.active {
-      display: block;
+    .video-wrapper.playing .video-overlay {
+      display: none;
     }
   </style>
 </head>
 <body>
 
-  <!-- ویدیو یکسان، ۵ بار تکرار شده -->
-  <video id="video1" src="Gray Illustrative Restaurant Menu.mp4" muted playsinline></video>
-  <video id="video2" src="Gray Illustrative Restaurant Menu.mp4" muted playsinline></video>
-  <video id="video3" src="Gray Illustrative Restaurant Menu.mp4" muted playsinline></video>
-  <video id="video4" src="Gray Illustrative Restaurant Menu.mp4" muted playsinline></video>
-  <video id="video5" src="Gray Illustrative Restaurant Menu.mp4" muted playsinline></video>
+  <!-- هر ویدیو داخل یک wrapper با یک overlay از فریم آخر -->
+  <div class="video-wrapper" data-loaded="false">
+    <div class="video-overlay" style="background-image: url('frame.jpg');"></div>
+    <video data-src="Gray Illustrative Restaurant Menu.mp4" muted playsinline></video>
+  </div>
+
+  <div class="video-wrapper" data-loaded="false">
+    <div class="video-overlay" style="background-image: url('frame.jpg');"></div>
+    <video data-src="Gray Illustrative Restaurant Menu.mp4" muted playsinline></video>
+  </div>
+
+  <div class="video-wrapper" data-loaded="false">
+    <div class="video-overlay" style="background-image: url('frame.jpg');"></div>
+    <video data-src="Gray Illustrative Restaurant Menu.mp4" muted playsinline></video>
+  </div>
+
+  <div class="video-wrapper" data-loaded="false">
+    <div class="video-overlay" style="background-image: url('frame.jpg');"></div>
+    <video data-src="Gray Illustrative Restaurant Menu.mp4" muted playsinline></video>
+  </div>
+
+  <div class="video-wrapper" data-loaded="false">
+    <div class="video-overlay" style="background-image: url('frame.jpg');"></div>
+    <video data-src="Gray Illustrative Restaurant Menu.mp4" muted playsinline></video>
+  </div>
 
   <script>
-    const videos = [
-      document.getElementById('video1'),
-      document.getElementById('video2'),
-      document.getElementById('video3'),
-      document.getElementById('video4'),
-      document.getElementById('video5'),
-    ];
+    const wrappers = document.querySelectorAll('.video-wrapper');
 
-    let current = 0;
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const wrapper = entry.target;
+        const video = wrapper.querySelector('video');
 
-    function playNext(index) {
-      if (index >= videos.length) return;
+        if (entry.isIntersecting && !wrapper.dataset.loaded) {
+          wrapper.dataset.loaded = "true";
 
-      const video = videos[index];
-      video.classList.add('active');
-      video.autoplay = true;
-      video.play();
+          // ۲ ثانیه صبر می‌کنیم، اگر هنوز توی دید بود، پخش می‌کنیم
+          setTimeout(() => {
+            if (isInViewport(wrapper)) {
+              video.src = video.dataset.src;
+              wrapper.classList.add('playing');
+              video.play();
 
-      video.onended = () => {
-        video.classList.remove('active');
-        video.pause();
-        video.currentTime = video.duration; // فریم آخر ثابت بمونه
-        playNext(index + 1);
-      };
+              video.onended = () => {
+                video.pause();
+                video.currentTime = video.duration;
+              };
+            }
+          }, 2000);
+        }
+      });
+    }, {
+      threshold: 0.6
+    });
+
+    wrappers.forEach(wrapper => {
+      observer.observe(wrapper);
+    });
+
+    // تابع بررسی اینکه عنصر هنوز در دید هست یا نه
+    function isInViewport(el) {
+      const rect = el.getBoundingClientRect();
+      return (
+        rect.top < window.innerHeight &&
+        rect.bottom > 0
+      );
     }
-
-    // شروع پخش از ویدیوی اول
-    playNext(0);
   </script>
 
 </body>
