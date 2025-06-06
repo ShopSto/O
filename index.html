@@ -2,18 +2,24 @@
 <html lang="fa">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Instagram-style Reels</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       background: black;
     }
 
     .reel {
-      width: 100%;
-      height: 100vh;
       position: relative;
+      width: 100vw;
+      aspect-ratio: 9 / 16;
       overflow: hidden;
+      background: black;
     }
 
     video {
@@ -21,7 +27,6 @@
       height: 100%;
       object-fit: cover;
       display: block;
-      background: black;
     }
   </style>
 </head>
@@ -38,7 +43,6 @@
     const videos = document.querySelectorAll(".reel video");
     let activeVideo = null;
 
-    // همه ویدیوها را دانلود و روی استوپ قرار بده
     videos.forEach(video => {
       video.addEventListener('loadeddata', () => {
         video.pause();
@@ -46,7 +50,6 @@
       });
     });
 
-    // پخش ویدیو اول بلافاصله
     window.addEventListener('DOMContentLoaded', () => {
       const firstVideo = videos[0];
       firstVideo.play();
@@ -71,7 +74,6 @@
             activeVideo.currentTime = 0;
           }
 
-          // اگر اولین ویدیو نیست، فقط وقتی کاملاً دیده شود پخش شود
           if (index !== 0) {
             video.currentTime = 0;
             video.play();
@@ -85,7 +87,6 @@
             });
           }
         } else {
-          // اگر کامل از صفحه خارج شد، به اول برگردد
           const rect = video.getBoundingClientRect();
           const fullyOut = rect.bottom <= 0 || rect.top >= window.innerHeight;
           if (fullyOut) {
