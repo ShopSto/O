@@ -46,7 +46,7 @@
       });
     });
 
-    // پخش ویدیو اول در شروع
+    // پخش ویدیو اول بلافاصله
     window.addEventListener('DOMContentLoaded', () => {
       const firstVideo = videos[0];
       firstVideo.play();
@@ -63,24 +63,35 @@
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         const video = entry.target;
+        const index = Array.from(videos).indexOf(video);
+
         if (entry.isIntersecting) {
           if (activeVideo && activeVideo !== video) {
             activeVideo.pause();
             activeVideo.currentTime = 0;
           }
-          video.currentTime = 0;
-          video.play();
-          activeVideo = video;
 
-          video.addEventListener('timeupdate', () => {
-            if (video.duration - video.currentTime < 0.5) {
-              video.pause();
-              video.currentTime = video.duration;
-            }
-          });
+          // اگر اولین ویدیو نیست، فقط وقتی کاملاً دیده شود پخش شود
+          if (index !== 0) {
+            video.currentTime = 0;
+            video.play();
+            activeVideo = video;
+
+            video.addEventListener('timeupdate', () => {
+              if (video.duration - video.currentTime < 0.5) {
+                video.pause();
+                video.currentTime = video.duration;
+              }
+            });
+          }
         } else {
-          video.pause();
-          video.currentTime = 0;
+          // اگر کامل از صفحه خارج شد، به اول برگردد
+          const rect = video.getBoundingClientRect();
+          const fullyOut = rect.bottom <= 0 || rect.top >= window.innerHeight;
+          if (fullyOut) {
+            video.pause();
+            video.currentTime = 0;
+          }
         }
       });
     }, { threshold: 0.8 });
