@@ -28,64 +28,41 @@
 <body>
 
   <!-- پنج ویدیو با آدرس گیت‌هاب -->
-  <div class="reel" data-src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu.mp4"></div>
-  <div class="reel" data-src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu.mp4"></div>
-  <div class="reel" data-src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu.mp4"></div>
-  <div class="reel" data-src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu.mp4"></div>
-  <div class="reel" data-src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu.mp4"></div>
+  <div class="reel"><video src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu.mp4" muted playsinline></video></div>
+  <div class="reel"><video src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu.mp4" muted playsinline></video></div>
+  <div class="reel"><video src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu.mp4" muted playsinline></video></div>
+  <div class="reel"><video src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu.mp4" muted playsinline></video></div>
+  <div class="reel"><video src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu.mp4" muted playsinline></video></div>
 
   <script>
-    const reels = document.querySelectorAll('.reel');
-    let currentlyPlaying = null;
+    const videos = document.querySelectorAll(".reel video");
+    let activeVideo = null;
 
-    const observer = new IntersectionObserver(async (entries) => {
-      for (let entry of entries) {
-        const reel = entry.target;
-
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        const video = entry.target;
         if (entry.isIntersecting) {
-          if (!reel.querySelector('video')) {
-            const video = document.createElement('video');
-            video.src = reel.dataset.src;
-            video.muted = true;
-            video.loop = false;
-            video.playsInline = true;
-            video.autoplay = false;
-            video.style.pointerEvents = 'none';
-
-            reel.appendChild(video);
-
-            video.addEventListener('timeupdate', () => {
-              // استاپ نزدیک پایان ویدیو
-              if (video.duration - video.currentTime < 0.5) {
-                video.pause();
-                video.currentTime = video.duration;
-              }
-            });
-
-            video.addEventListener('loadeddata', () => {
-              video.play();
-              currentlyPlaying = video;
-            });
-          } else {
-            const video = reel.querySelector('video');
-            video.currentTime = 0;
-            video.play();
-            currentlyPlaying = video;
+          if (activeVideo && activeVideo !== video) {
+            activeVideo.pause();
           }
+          video.currentTime = 0;
+          video.play();
+          activeVideo = video;
+
+          video.addEventListener('timeupdate', () => {
+            if (video.duration - video.currentTime < 0.5) {
+              video.pause();
+              video.currentTime = video.duration;
+            }
+          });
         } else {
-          const video = reel.querySelector('video');
-          if (video) {
-            video.pause();
-          }
+          video.pause();
         }
-      }
-    }, {
-      threshold: 0.8
-    });
+      });
+    }, { threshold: 0.8 });
 
-    reels.forEach((reel, i) => {
-      observer.observe(reel);
-    });
+    videos.forEach(video => observer.observe(video));
   </script>
+
 </body>
 </html>
