@@ -68,7 +68,7 @@
         const video = entry.target;
         const index = Array.from(videos).indexOf(video);
 
-        if (entry.isIntersecting) {
+        if (entry.intersectionRatio > 0.1) {
           if (activeVideo && activeVideo !== video) {
             activeVideo.pause();
             activeVideo.currentTime = 0;
@@ -95,7 +95,7 @@
           }
         }
       });
-    }, { threshold: 0.8 });
+    }, { threshold: 0.1 });
 
     videos.forEach(video => observer.observe(video));
   </script>
