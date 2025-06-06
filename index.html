@@ -44,7 +44,7 @@
     videos.forEach((video, index) => {
       video.src = VIDEO_SRC;
 
-      // فقط ویدیو اول یکبار پخش شود
+      // فقط ویدیو اول یک بار بعد از لود پخش شود
       if (index === 0) {
         video.addEventListener("loadeddata", () => {
           if (!hasPlayedFirst) {
@@ -54,7 +54,7 @@
         });
       }
 
-      // وقتی ویدیو کامل پخش شد، روی فریم آخر نگهش دار
+      // توقف روی فریم آخر
       video.addEventListener("timeupdate", () => {
         if (video.duration - video.currentTime < 0.5) {
           video.pause();
@@ -69,23 +69,21 @@
         const index = parseInt(video.dataset.index);
 
         if (entry.intersectionRatio > 0.1) {
-          // اگر ویدیویی دیگر در حال پخش باشد، متوقفش کن
+          // پخش ویدیو
           if (activeVideo && activeVideo !== video) {
             activeVideo.pause();
           }
-
-          // اگر ویدیوی اول نیست یا ویدیو اول بعد از بار اول است
           if (!(index === 0 && hasPlayedFirst)) {
             video.play();
           }
-
           activeVideo = video;
         } else {
+          // اگر ویدیو به طور کامل از دید خارج شود
           const rect = video.getBoundingClientRect();
           const fullyOut = rect.bottom <= 0 || rect.top >= window.innerHeight;
           if (fullyOut) {
             video.pause();
-            video.currentTime = 0;
+            video.currentTime = 0;  // بازگشت به ابتدا
           }
         }
       });
