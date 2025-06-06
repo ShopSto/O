@@ -1,109 +1,49 @@
 <!DOCTYPE html>
 <html lang="fa">
 <head>
-  <meta charset="UTF-8">
-  <title>ریلز تصویری با لودینگ</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reels Style Images</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
     body {
       margin: 0;
-      font-family: sans-serif;
-      background-color: white;
+      background: black;
     }
-
-    /* لودینگ */
-    #loader {
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      background: white;
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      transition: opacity 0.5s ease;
-    }
-
-    #loader.fade-out {
-      opacity: 0;
-      visibility: hidden;
-    }
-
-    .loader-image {
-      width: 150px;
-      height: 150px;
-      border-radius: 50%;
-      overflow: hidden;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-      margin-bottom: 20px;
-      border: 4px solid #ddd;
-    }
-
-    .loader-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .loader-text {
-      font-size: 20px;
-      color: #333;
-      font-weight: bold;
-    }
-
-    /* محتوای اصلی */
-    .reels-container {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-    }
-
     .reel {
       width: 100vw;
-      height: 100vh;
-      position: relative;
+      aspect-ratio: 9 / 16;
+      background: black;
       overflow: hidden;
     }
-
     .reel img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      display: block;
     }
   </style>
 </head>
 <body>
 
-<!-- لودینگ -->
-<div id="loader">
-  <div class="loader-image">
-    <img src="https://raw.githubusercontent.com/username/repo/main/Chef-restaurant-logo-by-DEEMKA-STUDIO-4.jpg" alt="Logo">
-  </div>
-  <div class="loader-text">بهترین انتخاب برای شما</div>
-</div>
-
-<!-- محتوای اصلی -->
-<div class="reels-container" id="mainContent">
+  <!-- ۵ تصویر -->
   <div class="reel">
-    <img src="https://raw.githubusercontent.com/username/repo/main/Gray%20Illustrative%20Restaurant%20Menu%20(1).png" alt="Reel 1">
+    <img src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu%20(1).png" alt="Image 1" />
   </div>
   <div class="reel">
-    <img src="https://raw.githubusercontent.com/username/repo/main/Gray%20Illustrative%20Restaurant%20Menu%20(2).png" alt="Reel 2">
+    <img src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu%20(1).png" alt="Image 2" />
   </div>
   <div class="reel">
-    <img src="https://raw.githubusercontent.com/username/repo/main/Gray%20Illustrative%20Restaurant%20Menu%20(3).png" alt="Reel 3">
+    <img src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu%20(1).png" alt="Image 3" />
   </div>
-</div>
-
-<script>
-  // مخفی کردن لودر و نمایش ریلز بعد از 2 ثانیه
-  window.addEventListener("load", () => {
-    setTimeout(() => {
-      document.getElementById("loader").classList.add("fade-out");
-      document.getElementById("mainContent").style.display = "flex";
-    }, 2000);
-  });
-</script>
+  <div class="reel">
+    <img src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu%20(1).png" alt="Image 4" />
+  </div>
+  <div class="reel">
+    <img src="https://raw.githubusercontent.com/ShopSto/O/main/Gray%20Illustrative%20Restaurant%20Menu%20(1).png" alt="Image 5" />
+  </div>
 
 </body>
 </html>
